@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% block body %}
+<!-- <ul class="nav justify-content-center" style="padding-top: 1em;">
+  <li class="nav-item">
+    <a class="btn btn-primary" href="{{ url_for('notes_create_or_edit') }}">Create</a>
+  </li>
+</ul> -->
+<div class="" style="padding-top: 2em;">
+  <a class="btn btn-primary" href="{{ url_for('notes_create_or_edit') }}">Create</a>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Name</th>
+        <th scope="col">description</th>
+        <th scope="col">Tag</th>
+        <th scope="col">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for note in notes %}
+      <tr>
+        <th scope="row">{{ note.id }}</th>
+        <td>{{ note.title }}</td>
+        <td>{{ note.description }}</td>
+        {% for t in note.tags %}
+        <td>{{ t.name }}</td>
+        <td>
+          <div style="display: flex; gap: 10px;">
+            <a href="{{ url_for('tags_view', tag_name=t.name) }}" style="color: #4fc418;"><i
+                class="bi bi-eye-fill"></i></a>
+            <a href="{{ url_for('notes_create_or_edit', note_id=note.id) }}" style="color: #007bff;">
+              <i class="bi bi-pen"></i>
+            </a>
+
+            <a data-bs-toggle="modal" data-bs-target="#delete_note" style="color: #dc3545;">
+              <i class="bi bi-trash"></i>
+            </a>
+            <div class="modal fade" id="delete_note" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title text-danger" id="myModalLabel">Warning !</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body">
+                    You want delete: {{ note.title }} ?
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <a href="{{ url_for('delete_note', note_id=note.id) }}" class="btn btn-danger">Yes</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </td>
+        {% endfor %}
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}
+
+<script>
+  var myModal = new bootstrap.Modal(document.getElementById('delete_note'), {
+    keyboard: false
+  })
+
+  myModal.show();
+</script>
